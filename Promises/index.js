@@ -1,5 +1,3 @@
-
-
 /*
     JavaScript Promises 
     A promise is an object which represents the eventual completion or failure of an async operation.
@@ -23,31 +21,30 @@
 
 */
 
-
 const cart = [
-    {
-        itemName:"shoes",
-        itemPrice:2000
-    },
-    {
-        itemName:"Shirt",
-        itemPrice:4000
-    },
-    {
-        itemName:"Bags",
-        itemPrice:1500
-    }
-]
+  {
+    itemName: "shoes",
+    itemPrice: 2000,
+  },
+  {
+    itemName: "Shirt",
+    itemPrice: 4000,
+  },
+  {
+    itemName: "Bags",
+    itemPrice: 1500,
+  },
+];
 
 let walletBalance = 10000;
 
 createOrder(cart)
-.then(orderId => orderId)
-.then(orderId => proceedToPayment(orderId))
-.then(orderStatus => showOrderSummary(orderStatus))
-.then(orderHistory => updateWallet(orderHistory))
-.then(res => console.log(res))
-.catch((err) => console.log(err.message))
+  .then((orderId) => orderId)
+  .then((orderId) => proceedToPayment(orderId))
+  .then((orderStatus) => showOrderSummary(orderStatus))
+  .then((orderHistory) => updateWallet(orderHistory))
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err.message));
 
 // const promise = createOrder(cart);
 
@@ -55,74 +52,60 @@ createOrder(cart)
 //     console.log(orderId);
 // })
 
-
 function createOrder(cart) {
-    const pr = new Promise(function(resolve, reject) {
-        // createOrder
-        //ValidateCart
-        //OrderId
+  const pr = new Promise(function (resolve, reject) {
+    // createOrder
+    //ValidateCart
+    //OrderId
 
-        if(!validateCart(cart)) {
+    if (!validateCart(cart)) {
+      const err = new Error("Cart is Empty");
+      reject(err);
+    }
+    // logic for createOrder
 
-            const err = new Error("Cart is Empty");
-            reject(err);
-        }
-        // logic for createOrder
+    const orderId = 12345;
 
-        const orderId = 12345;
+    if (orderId) {
+      resolve(orderId);
+    }
+  });
 
-        if(orderId){
-            resolve(orderId);
-        }
-    });
-
-    return pr;
+  return pr;
 }
-function proceedToPayment(orderId){
-    return new Promise(function(resolve,reject) {
-        if(orderId) {
-            resolve({paymentStatus:1,message:"Payment successfully completed"});
-        }
-        else{
-            reject(new Error("payment Failed"));
-        }
-    })
+function proceedToPayment(orderId) {
+  return new Promise(function (resolve, reject) {
+    if (orderId) {
+      resolve({ paymentStatus: 1, message: "Payment successfully completed" });
+    } else {
+      reject(new Error("payment Failed"));
+    }
+  });
 }
 
 function showOrderSummary(orderStatus) {
-    return new Promise(function (resolve, reject) {
-        if(orderStatus.paymentStatus === 1) {
-            resolve({status:"success",orders:cart});
-        }
-        else{
-            reject(new Error("Something went Wrong"));
-        }
-    })
+  return new Promise(function (resolve, reject) {
+    if (orderStatus.paymentStatus === 1) {
+      resolve({ status: "success", orders: cart });
+    } else {
+      reject(new Error("Something went Wrong"));
+    }
+  });
 }
 
 function updateWallet(orderHistory) {
+  return new Promise(function (resolve, reject) {
+    if (orderHistory.status === "success") {
+      let orderAmount = 4500;
 
-    return new Promise(function(resolve, reject) {
-        if(orderHistory.status === "success"){
-            let orderAmount = 4500;
-
-            walletBalance = walletBalance-orderAmount;
-            resolve({balance:walletBalance,message:"Wallet updated"});
-        }
-        else{
-            reject(new Error("Wallet balanced not updated"));
-        }
-
-    })
+      walletBalance = walletBalance - orderAmount;
+      resolve({ balance: walletBalance, message: "Wallet updated" });
+    } else {
+      reject(new Error("Wallet balanced not updated"));
+    }
+  });
 }
 
 function validateCart(cart) {
-    return true;
+  return true;
 }
-
-
-
-
-
-
-
